@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Context } from '../context/Context';
 
 const Navbar = () => {
-    const PF = 'https://mary-blog-project.herokuapp.com/images/';
     const { user, dispatch } = useContext(Context);
     const [keyword, setKeyword] = useState('');
 
@@ -41,7 +40,7 @@ const Navbar = () => {
                     <Link to="/setting">
                         <img
                             className="object-cover rounded-full w-[40px] h-[40px] mr-2"
-                            src={user.profilePic ? PF + user.profilePic : 'https://fakeimg.pl/40x40/?text=No image'}
+                            src={user.profilePic ? user.profilePic : 'https://fakeimg.pl/40x40/?text=No image'}
                             alt=""
                         />
                     </Link>

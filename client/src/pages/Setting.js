@@ -4,7 +4,6 @@ import Sidebar from '../components/Sidebar';
 import axios from 'axios';
 
 const Setting = () => {
-    const PF = 'https://mary-blog-project.herokuapp.com/images/';
     const { user, dispatch } = useContext(Context);
 
     const [email, setEmail] = useState('');
@@ -24,12 +23,11 @@ const Setting = () => {
         };
         if (file) {
             const data = new FormData();
-            const filename = Date.now() + file.name;
-            data.append('name', filename);
             data.append('file', file);
-            updateUser.profilePic = filename;
             try {
-                await axios.post('https://mary-blog-project.herokuapp.com/api/upload', data);
+                const fileUpload = await axios.post('https://mary-blog-project.herokuapp.com/api/upload', data);
+                updateUser.profilePic = fileUpload.data.url;
+                console.log(updateUser.profilePic);
             } catch (err) {}
         }
         try {
@@ -55,7 +53,7 @@ const Setting = () => {
                     <div className="flex items-center my-3">
                         <img
                             className="w-[100px] h-[100px] rounded object-cover"
-                            src={file ? URL.createObjectURL(file) : PF + user.profilePic}
+                            src={file ? URL.createObjectURL(file) : user.profilePic}
                             alt=""
                         />
                         <label htmlFor="fileInput">

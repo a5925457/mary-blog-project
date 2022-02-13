@@ -3,12 +3,19 @@ const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
 const postRoute = require('./routes/posts');
 const categoryRoute = require('./routes/categories');
-const path = require('path');
 const cors = require('cors');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3({
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    region: 'ap-northeast-1',
+});
 
 dotenv.config();
 app.use('/images', express.static('images'));
@@ -21,25 +28,35 @@ app.get('/', (req, res) => {
 });
 
 mongoose
-    .connect('mongodb+srv://a5925457:a5925457@cluster0.abxjn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+    .connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
     .then(console.log('Connected'))
     .catch((ex) => console.log(ex));
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'images');
-    },
-    filename: (req, file, cb) => {
-        cb(null, req.body.name);
-    },
+const extMap = {
+    'image/jpeg': '.jpg',
+    'image/png': '.png',
+    'image/gif': '.gif',
+};
+
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: process.env.S3_BUCKET,
+        key: function (req, file, cb) {
+            cb(null, `${Date.now()}${extMap[file.mimetype]}`);
+        },
+    }),
 });
 
-const upload = multer({ storage: storage });
 app.post('/api/upload', upload.single('file'), async (req, res) => {
-    res.status(200).json('File has been uploaded.');
+    try {
+        res.status(200).json({ url: req.file.location });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 app.use('/api/auth', authRoute);

@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { useLocation, Link } from 'react-router-dom';
 
 const SinglePost = () => {
-    const PF = 'https://mary-blog-project.herokuapp.com/images/';
     const { user } = useContext(Context);
     const useLoction = useLocation();
     const path = useLoction.pathname.split('/')[2];
@@ -55,7 +54,7 @@ const SinglePost = () => {
         <div className="basis-3/4 flex m-5">
             <div className="w-full">
                 {post.photo ? (
-                    <img className="w-full h-[300px] object-cover rounded mb-4" src={`${PF}${post.photo}`} alt="" />
+                    <img className="w-full h-[300px] object-cover rounded mb-4" src={post.photo} alt="" />
                 ) : null}
                 {updateMode ? (
                     <input

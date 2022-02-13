@@ -31,12 +31,10 @@ const Write = () => {
         };
         if (file) {
             const data = new FormData();
-            const filename = Date.now() + file.name;
-            data.append('name', filename);
             data.append('file', file);
-            newPost.photo = filename;
             try {
-                await axios.post('https://mary-blog-project.herokuapp.com/api/upload', data);
+                const fileUpload = await axios.post('https://mary-blog-project.herokuapp.com/api/upload', data);
+                newPost.photo = fileUpload.data.url;
             } catch (err) {}
         }
         try {
