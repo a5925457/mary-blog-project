@@ -9,7 +9,7 @@
   <h3 align="center">Mary's blog</h3>
 
   <p align="center">
-    a MERN website with Tailwind CSS.
+    a MERN stack blog site with Tailwind CSS.
     <br />
     <a href="https://mary-blog-project.netlify.app/">View Demo</a>
   </p>
@@ -20,6 +20,7 @@
 ## About The Project
 
 ![image](https://github.com/a5925457/mary-blog-project/blob/main/demo.png)
+This blog is using React.js as front-end framework, and Node.js, MongoDB as backend server. This kind of project is called MERN project, which is one of the most popular way to create modern websites.
 
 ### Built With
 
